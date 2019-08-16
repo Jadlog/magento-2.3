@@ -1,3 +1,5 @@
+define: ubuntu-magento-dev
+
 virtualbox_name: ubuntu-magento-dev
 
 virtualbox_memory: 4096 #lower memory may cause deploy of sample data to fail

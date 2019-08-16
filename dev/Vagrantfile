@@ -20,9 +20,13 @@ Vagrant.configure("2") do |config|
   #config.vm.box = "bento/ubuntu-18.04"
   config.vm.box = "ubuntu/bionic64"
 
-  #friendly name of Virtual Box Machine
+  #define machine
+  config.vm.define config_file["virtualbox_name"]
+
   config.vm.provider "virtualbox" do |v|
+    #friendly name of Virtual Box Machine
     v.name = config_file["virtualbox_name"]
+    #allocated memory
     v.memory = config_file["virtualbox_memory"]
   end
 
