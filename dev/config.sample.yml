@@ -1,0 +1,45 @@
+virtualbox_name: ubuntu-magento-dev
+
+virtualbox_memory: 4096 #lower memory may cause deploy of sample data to fail
+
+hostname: magento.dev.local
+
+root_db_password: mypass
+
+private_network_ip: "192.168.50.5"
+
+synced_folders:
+  nfs: true
+  default_disabled: true
+  folders:
+    - ori: "../src/"
+      dst: "/src/"
+    - ori: "../dev/"
+      dst: "/development/"
+
+ssmtp:
+  test_recipient: youremail@yourdomain.com
+  conf:
+    root: google_account_to_send_email@gmail.com
+    mailhub: smtp.gmail.com:587
+    auth_user: google_account_to_send_email
+    auth_pass: your_secure_password
+    use_starttls: "YES"
+    rewrite_domain: gmail.com
+    from_line_override: "yes"
+  revaliases: root:google_account_to_send_email@gmail.com:smtp.gmail.com:587
+
+magento2_install:
+  access_key:
+    #https://marketplace.magento.com/customer/accessKeys/
+    public: your_public_key
+    private: your_private_key
+  admin_firstname: admin
+  admin_lastname: admin
+  admin_email: youremail@yourdomain.com
+  admin_user: admin
+  admin_password: admin123
+  language: pt_BR
+  currency: BRL
+  timezone: America/Sao_Paulo
+

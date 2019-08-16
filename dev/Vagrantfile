@@ -1,0 +1,112 @@
+#encoding: utf-8
+
+#install needed plugins
+required_plugins = %w(vagrant-hostmanager vagrant-timezone)
+plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
+if not plugins_to_install.empty?
+  puts "Installing plugins: #{plugins_to_install.join(' ')}"
+  if system "vagrant plugin install #{plugins_to_install.join(' ')}"
+    exec "vagrant #{ARGV.join(' ')}"
+  else
+    abort "Installation of one or more plugins has failed. Aborting."
+  end
+end
+
+# read YAML config file
+config_file = YAML.load_file("config.yml")
+
+Vagrant.configure("2") do |config|
+  # Base image for VM
+  #config.vm.box = "bento/ubuntu-18.04"
+  config.vm.box = "ubuntu/bionic64"
+
+  #friendly name of Virtual Box Machine
+  config.vm.provider "virtualbox" do |v|
+    v.name = config_file["virtualbox_name"]
+    v.memory = config_file["virtualbox_memory"]
+  end
+
+  # Host name of the VM
+  config.vm.hostname = config_file["hostname"]
+
+  #timezone
+  config.timezone.value = :host
+
+  # Configure private network by DHCP
+  #config.vm.network "private_network", type: "dhcp"
+
+  # Configure private network
+  config.vm.network "private_network", ip: config_file["private_network_ip"]
+
+  # Update /etc/hosts on all active VMs
+  config.hostmanager.enabled = true
+
+  # Update host machine's /etc/hosts
+  config.hostmanager.manage_host = true
+
+  # Don't ignore private IPs
+  config.hostmanager.ignore_private_ip = false
+
+  # Include offline VMs (rather than just active ones)
+  config.hostmanager.include_offline = true
+
+  # Use IP resolver to get DHCP configured address
+  config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+    `vagrant ssh -c "hostname -I"`.split.last
+  end
+
+  #synced folders
+  if config_file["synced_folders"] then
+    nfs = config_file["synced_folders"]["nfs"]
+    config.vm.synced_folder ".", "/vagrant", disabled: config_file["synced_folders"]["default_disabled"], nfs: nfs
+    config_file["synced_folders"]["folders"].each do |f|
+      config.vm.synced_folder f["ori"], f["dst"], nfs: nfs
+    end
+  else
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+  end
+
+  #provisioner
+  config.vm.provision "shell", path: "provisioner.sh", args: config_file["root_db_password"]
+
+  #sSMTP sendmail
+  config_ssmtp = config_file["ssmtp"]
+  config.vm.provision "shell" do |s|
+    s.path = "ssmtp_config.sh"
+    s.args = [
+      config_ssmtp["test_recipient"],
+      config_ssmtp["conf"]["root"],
+      config_ssmtp["conf"]["mailhub"],
+      config_ssmtp["conf"]["auth_user"],
+      config_ssmtp["conf"]["auth_pass"],
+      config_ssmtp["conf"]["use_starttls"],
+      config_ssmtp["conf"]["rewrite_domain"],
+      config_ssmtp["conf"]["from_line_override"],
+      config_ssmtp["revaliases"]
+    ]
+  end
+
+  #system adjustments for magento2 installation
+  config.vm.provision "shell", path: "prepare_install_magento2.sh"
+
+  #install magento2
+  config_mage2 = config_file["magento2_install"]
+  config.vm.provision "shell" do |s|
+    s.path = "install_magento2.sh"
+    s.args = [
+      "http://#{config_file['hostname']}/",
+      config_file["root_db_password"],
+      config_mage2["access_key"]["public"],
+      config_mage2["access_key"]["private"],
+      config_mage2["admin_firstname"],
+      config_mage2["admin_lastname"],
+      config_mage2["admin_email"],
+      config_mage2["admin_user"],
+      config_mage2["admin_password"],
+      config_mage2["language"],
+      config_mage2["currency"],
+      config_mage2["timezone"]
+    ]
+  end
+
+end
