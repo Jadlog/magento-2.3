@@ -20,6 +20,9 @@ echo -e " --> Updating the server.\n\n"
 sudo apt-get update -y >/dev/null 2>&1
 sudo apt-get upgrade -y >/dev/null 2>&1
 
+echo -e "\n --> Installing swapspace - dynamically manage swap space .\n\n"
+sudo apt-get install -y swapspace >/dev/null 2>&1
+
 echo -e "\n --> Installing cURL.\n\n"
 sudo apt-get install -y curl >/dev/null 2>&1
 
