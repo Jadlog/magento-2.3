@@ -2,7 +2,7 @@ define: ubuntu-magento-dev
 
 virtualbox_name: ubuntu-magento-dev
 
-virtualbox_memory: 4096 #lower memory may cause deploy of sample data to fail
+virtualbox_memory: 2048 #lower memory may cause deploy of sample data to slow down or fail
 
 hostname: magento.dev.local
 

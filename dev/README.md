@@ -41,51 +41,55 @@ A configuração é feita na seção *ssmtp* do arquivo *config.yml*; Sugerimos 
 <a id="arquivo-configyml"></a>
 ### Arquivo *config.yml*
 Segue exemplo de configuração:
-  ```
-        virtualbox_name: ubuntu-magento-dev
 
-        virtualbox_memory: 4096 #lower memory may cause deploy of sample data to fail
+```
+    define: ubuntu-magento-dev
 
-        hostname: magento.dev.local
+    virtualbox_name: ubuntu-magento-dev
 
-        root_db_password: mypass
+    virtualbox_memory: 2048 #lower memory may cause deploy of sample data to fail
 
-        private_network_ip: "192.168.50.5"
+    hostname: magento.dev.local
 
-        synced_folders:
-          nfs: true
-          default_disabled: true
-          folders:
-            - ori: "../src/"
-              dst: "/src/"
-            - ori: "../dev/"
-              dst: "/development/"
+    root_db_password: mypass
 
-        ssmtp:
-          test_recipient: youremail@yourdomain.com
-          conf:
-            root: google_account_to_send_email@gmail.com
-            mailhub: smtp.gmail.com:587
-            auth_user: google_account_to_send_email
-            auth_pass: your_secure_password
-            use_starttls: "YES"
-            rewrite_domain: gmail.com
-            from_line_override: "yes"
-          revaliases: root:google_account_to_send_email@gmail.com:smtp.gmail.com:587
+    private_network_ip: "192.168.50.5"
 
-        magento2_install:
-          access_key:
-            #https://marketplace.magento.com/customer/accessKeys/
-            public: your_public_key
-            private: your_private_key
-          admin_firstname: admin
-          admin_lastname: admin
-          admin_email: youremail@yourdomain.com
-          admin_user: admin
-          admin_password: admin123
-          language: pt_BR
-          currency: BRL
-          timezone: America/Sao_Paulo
+    synced_folders:
+      nfs: true
+      default_disabled: true
+      folders:
+        - ori: "../src/"
+          dst: "/src/"
+        - ori: "../dev/"
+          dst: "/development/"
+
+    ssmtp:
+      test_recipient: youremail@yourdomain.com
+      conf:
+        root: google_account_to_send_email@gmail.com
+        mailhub: smtp.gmail.com:587
+        auth_user: google_account_to_send_email
+        auth_pass: your_secure_password
+        use_starttls: "YES"
+        rewrite_domain: gmail.com
+        from_line_override: "yes"
+      revaliases: root:google_account_to_send_email@gmail.com:smtp.gmail.com:587
+
+    magento2_install:
+      access_key:
+        #https://marketplace.magento.com/customer/accessKeys/
+        public: your_public_key
+        private: your_private_key
+      admin_firstname: admin
+      admin_lastname: admin
+      admin_email: youremail@yourdomain.com
+      admin_user: admin
+      admin_password: admin123
+      language: pt_BR
+      currency: BRL
+      timezone: America/Sao_Paulo
+
 ```
 
 
@@ -98,16 +102,19 @@ Abaixo seguem os passos gerais para instalação do ambiente de desenvolvimento.
 2. Instale o *VirtualBox*. Site oficial [virtualbox.org](http://www.virtualbox.org/).
 
 3. Caso utilize hospedeiro *Linux* ou *MacOS* você pode habilitar a opção de pastas sincronizadas utilizando *nfs* na secão *synced_folders* do arquivo de configuração. O *NFS* pode ser instalado conforme o sistema operacional hospedeiro (*e.g. nfs-utils*). Lembre-se de configurar o servidor nfs para aceitar a versão de *nfs* utilizada pelo *Vagrant*, e.g */etc/nfs.conf*:
-    ```
+
+```
     [nfsd]
      vers3=y
      udp=y
-    ```
+```
 
 4. Copie o arquivo *config.sample.yml* para *config.yml*, faça os ajustes necessários para seu ambiente e, em seguida, inicie o Vagrant:
-    ```
+
+```
     $ vagrant up
-    ```
+```
+
 * Durante a instalação será enviado um email de teste para a conta configurada em *test_recipient* de acordo com os dados informados no arquivo *config.yml* na seção *ssmtp*. O assunto do email será algo similar a *"This is a test message from root@\<hostname\> on \<date\>"*.
 
 
