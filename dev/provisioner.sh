@@ -141,6 +141,7 @@ echo -e "--> NOTE THAT THIS IS NOT SECURE AND FOR DEVELOPMENT ONLY.\n\n"
 
 sudo sed -i -e 's/127.0.0.1/0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
 
+#Some mysql tweaks
 sudo tee -a /etc/mysql/mysql.conf.d/mysqld.cnf << EOT
 [mysqld]
 character_set_server=utf8mb4
@@ -160,9 +161,6 @@ mysql -uroot -p${ROOT_DB_PASSWORD} -e "${SQL}" >/dev/null 2>&1
 #echo -e "\n --> Set timezone for MySQL to 'America/Los_Angeles'. \n\n"
 #mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -uroot -p${ROOT_DB_PASSWORD} mysql
 #sudo sed -ri '/\[mysqld\]/ a\ default-time-zone = \x27America/Los_Angeles\x27' /etc/mysql/mysql.conf.d/mysqld.cnf
-
-#Some mysql tweaks
-
 
 echo -e "\n --> Restarting MySQL. \n\n"
 sudo systemctl restart mysql >/dev/null 2>&1
@@ -209,6 +207,9 @@ echo -e "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | sudo
 
 sudo apt-get install -y phpmyadmin >/dev/null 2>&1
 sudo ln -s /etc/phpmyadmin/apache.conf /etc/apache2/sites-enabled/phpmyadmin.conf
+
+#fix phpmyadmin bug (https://stackoverflow.com/questions/48001569/phpmyadmin-count-parameter-must-be-an-array-or-an-object-that-implements-co)
+sudo sed -ir -e "s/(count(\$analyzed_sql_results\['select_expr'\] == 1)/((count(\$analyzed_sql_results\['select_expr'\]) == 1)/" /usr/share/phpmyadmin/libraries/sql.lib.php
 
 ##
 ## Elastic Search
