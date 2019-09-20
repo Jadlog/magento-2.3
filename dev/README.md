@@ -129,7 +129,7 @@ $ vagrant up
 <a id="git-no-windows"></a>
 ### Git no Windows
 Instalar com a opção "**Checkout as-is, commit Unix-style line endings**".
-![Install Git on Windows - EOL Config](install_git_on_windows_eol_config.png)
+![Install Git on Windows - EOL Config](install_git_on_windows_eol_config.png?raw=true)
 
 <a id="scripts-para-gerenciar-o-modulo-na-maquina-virtual"></a>
 ### Scripts para gerenciar o módulo na máquina virtual
