@@ -16,6 +16,9 @@
   - [Conta de email](#conta-de-email)
   - [Arquivo *config.yml*](#arquivo-configyml)
 - [Instalação](#instalacao)
+- [Notas](#notas)
+  - [Git no Windows](#git-no-windows)
+  - [Scripts para gerenciar o módulo na máquina virtual](#scripts-para-gerenciar-o-modulo-na-maquina-virtual)
 - [Desenvolvimento](#desenvolvimento)
 
 <!-- /MarkdownTOC -->
@@ -25,9 +28,9 @@
 
 <a id="vagrant"></a>
 ### Vagrant
-O ambiente de desenvolvimento utiliza *Vagrant* para gerenciar a máquina virtual com o software necessário. 
+O ambiente de desenvolvimento utiliza *Vagrant* para gerenciar a máquina virtual com o software necessário.
 
-Instale o *Vagrant* de acordo com seu ambiente de desenvolvimento. Recomendamos o uso do *VirtualBox* como software de virtualização. 
+Instale o *Vagrant* de acordo com seu ambiente de desenvolvimento. Recomendamos o uso do *VirtualBox* como software de virtualização.
 
 <a id="chaves-de-acesso-a-loja-magento-2"></a>
 ### Chaves de acesso a loja Magento 2
@@ -35,8 +38,7 @@ Você deve criar as chaves de acesso a loja do Magento 2 no endereço https://ma
 
 <a id="conta-de-email"></a>
 ### Conta de email
-O sistema será capaz de enviar emails utilizando um provedor externo. Essa funcionalidade é atendida pelo pacote *sSMTP* (vide arquivo *ssmtp_config.sh*). 
-A configuração é feita na seção *ssmtp* do arquivo *config.yml*; Sugerimos a utilização do *gmail* e o arquivo de configuração de exemplo *config.sample.yml* já possui exemplo de uso. 
+O sistema será capaz de enviar emails utilizando um provedor externo. Essa funcionalidade é atendida pelo pacote *sSMTP* (vide arquivo *ssmtp_config.sh*). A configuração é feita na seção *ssmtp* do arquivo *config.yml*; Sugerimos a utilização do *gmail* e o arquivo de configuração de exemplo *config.sample.yml* já possui exemplo de uso.
 
 <a id="arquivo-configyml"></a>
 ### Arquivo *config.yml*
@@ -94,8 +96,8 @@ Segue exemplo de configuração:
 
 
 <a id="instalacao"></a>
-## Instalação 
-Abaixo seguem os passos gerais para instalação do ambiente de desenvolvimento. 
+## Instalação
+Abaixo seguem os passos gerais para instalação do ambiente de desenvolvimento.
 
 1. Instale o *Vagrant*. Site oficial: [vagrantup.com](http://vagrantup.com/).
 
@@ -112,7 +114,7 @@ Abaixo seguem os passos gerais para instalação do ambiente de desenvolvimento.
 4. Copie o arquivo *config.sample.yml* para *config.yml*, faça os ajustes necessários para seu ambiente e, em seguida, inicie o Vagrant:
 
 ```
-    $ vagrant up
+$ vagrant up
 ```
 
 * Durante a instalação será enviado um email de teste para a conta configurada em *test_recipient* de acordo com os dados informados no arquivo *config.yml* na seção *ssmtp*. O assunto do email será algo similar a *"This is a test message from root@\<hostname\> on \<date\>"*.
@@ -121,6 +123,53 @@ Abaixo seguem os passos gerais para instalação do ambiente de desenvolvimento.
 5. Acesse o site em [magento.dev.local:8000](http://magento.dev.local:8000/) e verifique as configurações do Apache e do PHP. *Caso tenha alterado o hostname no arquivo de configuração deve utilizar a URL correpondente.*
 
 6. O ambiente de desenvolvimento Magento já deve estar disponível em [magento.dev.local](http://magento.dev.local/). O *backend* pode ser acessado em [magento.dev.local/admin](http://magento.dev.local/admin/).
+
+<a id="notas"></a>
+## Notas
+<a id="git-no-windows"></a>
+### Git no Windows
+Instalar com a opção "**Checkout as-is, commit Unix-style line endings**".
+![Install Git on Windows - EOL Config](install_git_on_windows_eol_config.png)
+
+<a id="scripts-para-gerenciar-o-modulo-na-maquina-virtual"></a>
+### Scripts para gerenciar o módulo na máquina virtual
+***Para que esses scripts funcionem, os mapeamentos das pastas devem estar conforme o exemplo de configuração***:
+```
+      folders:
+        - ori: "../src/"
+          dst: "/src/"
+        - ori: "../dev/"
+          dst: "/development/"
+```
+A utilização desses scripts é feita diretamente no *shell* da máquina virtual, acessível pelo comando:
+```
+$ vagrant ssh
+```
+Todos os scripts estão na pasta */development/* da máquina virtual.
+
+- enable_module.sh
+
+  Habilita o módulo *Jadlog_Embarcador* na pasta de instalação do Magento da máquina virtual. Uso:
+  ```
+  vagrant@magento:~$ /development/enable_module.sh
+
+  ```
+
+- cache_clean.sh
+
+  Atualiza o código do fornecedor *Jadlog* na pasta de instalação do Magento da máquina virtual. Uso:
+  ```
+  vagrant@magento:~$ /development/cache_clean.sh
+
+  ```
+
+- disable_module.sh
+
+  Desabilita o módulo *Jadlog_Embarcador* e **remove** todo o código referente ao fornecedor *Jadlog* da pasta de instalação do Magento da máquina virtual. Uso:
+  ```
+  vagrant@magento:~$ /development/disable_module.sh
+
+  ```
 
 <a id="desenvolvimento"></a>
 ## Desenvolvimento
