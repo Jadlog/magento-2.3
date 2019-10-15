@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+  <body>
+    <referenceBlock name="checkout.root">
+      <arguments>
+        <argument name="jsLayout" xsi:type="array">
+          <item name="components" xsi:type="array">
+            <item name="checkout" xsi:type="array">
+              <item name="children" xsi:type="array">
+                <item name="steps" xsi:type="array">
+                  <item name="children" xsi:type="array">
+                    <item name="billing-step" xsi:type="array">
+                      <item name="component" xsi:type="string">uiComponent</item>
+                      <item name="children" xsi:type="array">
+                        <item name="payment" xsi:type="array">
+                          <item name="children" xsi:type="array">
+                            <item name="beforeMethods" xsi:type="array">
+                              <item name="children" xsi:type="array">
+                                <item name="pudo-reminder" xsi:type="array">
+                                  <item name="component" xsi:type="string">Jadlog_Embarcador/js/view/checkout/payment/pudo-reminder</item>
+                                </item>
+                              </item>
+                            </item>
+                          </item>
+                        </item>
+                      </item>
+                    </item>
+                    <item name="shipping-step" xsi:type="array">
+                      <item name="children" xsi:type="array">
+                        <item name="shippingAddress" xsi:type="array">
+                          <item name="config" xsi:type="array">
+                            <item name="shippingMethodItemTemplate" xsi:type="string">Jadlog_Embarcador/custom-method-item-template</item>
+                            <item name="shippingMethodListTemplate" xsi:type="string">Jadlog_Embarcador/custom-method-list-template</item>
+                          </item>
+                          <item name="children" xsi:type="array">
+                            <item name="shippingAdditional" xsi:type="array">
+                              <item name="component" xsi:type="string">uiComponent</item>
+                              <item name="displayArea" xsi:type="string">shippingAdditional</item>
+                              <item name="children" xsi:type="array">
+                                <item name="additional_block" xsi:type="array">
+                                  <item name="component" xsi:type="string">Jadlog_Embarcador/js/view/checkout/shipping/pudo-form</item>
+                                </item>
+                              </item>
+                            </item>
+                          </item>
+                        </item>
+                      </item>
+                    </item>
+                  </item>
+                </item>
+              </item>
+            </item>
+          </item>
+        </argument>
+      </arguments>
+    </referenceBlock>
+  </body>
+</page>

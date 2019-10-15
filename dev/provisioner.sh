@@ -69,7 +69,9 @@ sudo apt-get install -y unzip >/dev/null 2>&1
 echo -e "\n --> Installing Apache.\n\n"
 sudo apt-get install -y apache2 >/dev/null 2>&1
 sudo sed -i -e 's/AllowOverride None/AllowOverride All/gi' /etc/apache2/apache2.conf
-sudo usermod -a -G www-data vagrant
+#vagrant default group is www-data now
+sudo usermod -g www-data vagrant
+sudo usermod -a -G vagrant vagrant
 sudo a2enmod rewrite >/dev/null 2>&1
 
 #echo "ServerName localhost" >> /etc/apache2/apache2.conf

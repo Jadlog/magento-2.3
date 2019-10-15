@@ -1,3 +1,4 @@
 .vagrant
 *.log
 config.yml
+API_JADLOG*.pdf

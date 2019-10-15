@@ -3,7 +3,7 @@
 [//]: # (vim ~/.grip/settings.py)
 [//]: # (PASSWORD = 'YOUR-ACCESS-TOKEN')
 [//]: # (https://github.com/naokazuterada/MarkdownTOC)
-[//]: # (Many thanks to silentcast for animated gif generation: ppa:sethj/silentcast)
+[//]: # (Many thanks to peek for animated gif generation: https://github.com/phw/peek)
 
 # Extensão de Frete Jadlog - Magento 2.3
 ## Ambiente para desenvolvimento
@@ -145,29 +145,45 @@ A utilização desses scripts é feita diretamente no *shell* da máquina virtua
 ```
 $ vagrant ssh
 ```
-Todos os scripts estão na pasta */development/* da máquina virtual.
+Todos os scripts estão na pasta */development/magemodule/* da máquina virtual.
+
+- install_module.sh
+
+  Instala o módulo *Jadlog_Embarcador* na pasta de instalação do Magento da máquina virtual. Uso:
+  ```
+  vagrant@magento:~$ /development/magemodule/install_module.sh
+
+  ```
 
 - enable_module.sh
 
-  Habilita o módulo *Jadlog_Embarcador* na pasta de instalação do Magento da máquina virtual. Uso:
+  Habilita o módulo *Jadlog_Embarcador* (uma vez já instalado). Uso:
   ```
-  vagrant@magento:~$ /development/enable_module.sh
+  vagrant@magento:~$ /development/magemodule/enable_module.sh
 
   ```
 
 - cache_clean.sh
 
-  Atualiza o código do fornecedor *Jadlog* na pasta de instalação do Magento da máquina virtual. Uso:
+  Limpa o cache do Magento e opcionalmente recompila os módulos. Uso:
   ```
-  vagrant@magento:~$ /development/cache_clean.sh
+  vagrant@magento:~$ /development/magemodule/cache_clean.sh [compile]
 
   ```
 
 - disable_module.sh
 
-  Desabilita o módulo *Jadlog_Embarcador* e **remove** todo o código referente ao fornecedor *Jadlog* da pasta de instalação do Magento da máquina virtual. Uso:
+  Desabilita o módulo *Jadlog_Embarcador*. Uso:
   ```
-  vagrant@magento:~$ /development/disable_module.sh
+  vagrant@magento:~$ /development/magemodule/disable_module.sh
+
+  ```
+
+- uninstall_module.sh
+
+  Desinstala o módulo *Jadlog_Embarcador*. Uso:
+  ```
+  vagrant@magento:~$ /development/magemodule/uninstall_module.sh
 
   ```
 

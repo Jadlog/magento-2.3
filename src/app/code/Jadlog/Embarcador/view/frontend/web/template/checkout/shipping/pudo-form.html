@@ -1,0 +1,31 @@
+<div id="popup-jadlog-pickup"
+  data-bind="mageInit: {
+    'Magento_Ui/js/modal/modal':{
+    'type': 'popup',
+    'autoOpen': shouldShowPopupJadlogPickup(),
+    'title': 'Escolha o ponto de retirada',
+    'responsive': true,
+    'buttons': [{
+      text: 'Ok',
+      class: 'action'
+    }]
+  }}"
+>
+  <div class="content">
+    <div id="carrier-pudo-list-wrapper" data-bind="visible: shouldShowPopupJadlogPickup()">
+      <p data-bind="visible: !showPudoSelection(), i18n: 'Please provide postcode to see nearest pudos'"></p>
+      <div data-bind="visible: showPudoSelection()">
+        <p>
+          <span data-bind="i18n: 'Select pickup pudo.'"></span>
+        </p>
+        <select id="carrier-pudo-list"
+          data-bind="options: pudos(),
+          value: selectedPudo,
+          optionsValue: 'name',
+          optionsText: function(item){return item.location + ' (' + item.name +')';}"
+        >
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

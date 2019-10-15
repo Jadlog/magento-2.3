@@ -17,8 +17,21 @@ export ADMIN_PASSWORD=$9
 export LANGUAGE=${10}
 export CURRENCY=${11}
 export TIMEZONE=${12}
-export COMPOSER_AUTH="{\"http-basic\": {\"repo.magento.com\": {\"username\": \"${PUBLIC_KEY}\", \"password\": \"${PRIVATE_KEY}\"}}}"
+#export COMPOSER_AUTH="{\"http-basic\": {\"repo.magento.com\": {\"username\": \"${PUBLIC_KEY}\", \"password\": \"${PRIVATE_KEY}\"}}}"
 
+
+echo -e "\n --> Setting up repository credentials for Magento 2.\n\n"
+mkdir -p /home/vagrant/.composer
+tee -a /home/vagrant/.composer/auth.json << EOT
+{
+  "http-basic": {
+    "repo.magento.com": {
+      "username": "${PUBLIC_KEY}",
+      "password": "${PRIVATE_KEY}"
+    }
+  }
+}
+EOT
 
 function install {
   echo -e "\n --> Installing Magento 2 using composer.\n\n"
@@ -30,7 +43,7 @@ function install {
 }
 
 function setup {
-  echo -e "\n --> Seting up Magento 2.\n\n"
+  echo -e "\n --> Setting up Magento 2.\n\n"
   echo "Parameters:"
   echo "--base-url=\"${BASE_URL}\""
   echo "--db-host=\"localhost\""
@@ -65,7 +78,10 @@ function setup {
   --use-rewrites="1" \
   --backend-frontname="admin" \
 
-  echo -e "\n --> Seting up Magento 2 on developer mode.\n\n"
+  echo -e "\n --> Copying credentials.\n\n"
+  cp /home/vagrant/.composer/auth.json /var/www/html/
+
+  echo -e "\n --> Setting up Magento 2 on developer mode.\n\n"
   php /var/www/html/bin/magento deploy:mode:set developer
   php /var/www/html/bin/magento deploy:mode:show
 
@@ -80,7 +96,6 @@ function sample_data {
 install
 setup
 sample_data
-sudo chown -R www-data.www-data /var/www/html
 
 echo -e "\n\n============================================\n"
 echo -e "Finished installing magento2.\n"
