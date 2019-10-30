@@ -32,16 +32,22 @@ class Valor extends \Magento\Framework\App\Action\Action implements HttpPostActi
 		//echo "Hello World " . print_r($this->getParam('cep'),true);
 		//echo "42.42";
 		//exit;
-		$cep = $this->_helperData->getCep($this->getParam('cep'));
+		$ceps = $this->getParam('cep');
+		$cep_array =[];
+		foreach($ceps as $cep) {
+			array_push($cep_array, $this->_helperData->getCep($cep)['cep']);
+		}
 		$result = $this->resultJsonFactory->create();
 		$f = new FreteValor(
 			$this->_helperData,
-			$cep['cep'],
+			$cep_array,
 			$this->getParam('peso'),
 			$this->getParam('valor_declarado'),
 			$this->getParam('modalidade')
 		);
 		$r = $f->getData();
-		return $result->setData([$r] + ['success' => true] + ['valor' => $r['frete'][0]['vltotal']]);
+
+		//return $result->setData(['$f->getData()' => $r]);
+		return $result->setData(['$f->getData()' => $r] + ['success' => true] + ['valor' => $r[$cep_array[0]]['frete'][0]['vltotal']]);
 	}
 }

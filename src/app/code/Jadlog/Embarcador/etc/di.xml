@@ -2,16 +2,4 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
   <preference for="Jadlog\Embarcador\Api\PudoManagementInterface" type="Jadlog\Embarcador\Model\PudoManagement" />
   <preference for="Jadlog\Embarcador\Api\Data\PudoInterface" type="Jadlog\Embarcador\Model\Pudo" />
-  <!--type name="Magento\Quote\Model\Quote\Address">
-    <plugin name="jadlog-address" type="Jadlog\Embarcador\Plugin\Quote\AddressPlugin" sortOrder="1" disabled="false"/>
-  </type-->
-  <type name="Magento\Quote\Model\ShippingAssignment">
-    <plugin name="jadlog-pudo-plugin" type="Jadlog\Embarcador\Plugin\Quote\ShippingAssignmentPlugin" sortOrder="1" disabled="false"/>
-  </type>
-  <!--type name="Magento\Quote\Model\Quote\Address\ToOrderAddress">
-    <plugin name="jadlog-quote-addres-to-order-address" type="Jadlog\Embarcador\Plugin\Quote\ConvertQuoteAddressToOrderAddressPlugin"/>
-  </type-->
-  <type name="Magento\Checkout\Api\ShippingInformationManagementInterface">
-    <plugin name="jadlog-pudo-save-address" type="Jadlog\Embarcador\Plugin\Checkout\SaveAddressPlugin"/>
-  </type>
 </config>

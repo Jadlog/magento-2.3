@@ -16,6 +16,8 @@
   - [Conta de email](#conta-de-email)
   - [Arquivo *config.yml*](#arquivo-configyml)
 - [Instalação](#instalacao)
+- [Solução de problemas](#solucao-de-problemas)
+  - [Site ficou sem os dados de exemplo \(*sample data*\)](#site-ficou-sem-os-dados-de-exemplo-sample-data)
 - [Notas](#notas)
   - [Git no Windows](#git-no-windows)
   - [Scripts para gerenciar o módulo na máquina virtual](#scripts-para-gerenciar-o-modulo-na-maquina-virtual)
@@ -124,8 +126,28 @@ $ vagrant up
 
 6. O ambiente de desenvolvimento Magento já deve estar disponível em [magento.dev.local](http://magento.dev.local/). O *backend* pode ser acessado em [magento.dev.local/admin](http://magento.dev.local/admin/).
 
+<a id="solucao-de-problemas"></a>
+## Solução de problemas
+
+<a id="site-ficou-sem-os-dados-de-exemplo-sample-data"></a>
+### Site ficou sem os dados de exemplo (*sample data*)
+Algumas vezes o *composer* não consegue baixar todos os arquivos necessários. Caso isso ocorra, será exibido um erro do tipo:
+```
+The "https://packagist.org/p/symfony/property-access%249847e6b4fcbdf1a1c484598185a2f246e0c0bb7ab796836c2eb98ed925f08d95.json" file could not be downloaded (HTTP/1.1 404 Not Found)
+```
+
+Para resolver deve-se acessar a máquina virtual (*vagrant ssh*) e executar:
+```
+vagrant@magento:~$ composer clear-cache
+vagrant@magento:~$ composer -vvv
+vagrant@magento:~$ /var/www/html/bin/magento sampledata:deploy
+vagrant@magento:~$ /var/www/html/bin/magento setup:upgrade
+
+```
+
 <a id="notas"></a>
 ## Notas
+
 <a id="git-no-windows"></a>
 ### Git no Windows
 Instalar com a opção "**Checkout as-is, commit Unix-style line endings**".

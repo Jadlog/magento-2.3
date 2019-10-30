@@ -25,6 +25,14 @@ class Data extends AbstractHelper {
     return array("error" => $error, "cep" => $cepNumbers);
   }
 
+  public function sanitizeValue($x) {
+    $r = $x;
+    if (is_array($x)) {
+      $r = join($x," ");
+    }
+    return trim($r);
+  }
+
   public function getConfigValue($field) {
     return $this->scopeConfig->getValue($field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
   }
@@ -96,5 +104,18 @@ class Data extends AbstractHelper {
   public function getRemetenteCep() {
     return $this->getConfigValue("jadlog_embarcador/remetente/cep");
   }
+
+  public function getMyPudoURL() {
+    return $this->getConfigValue("jadlog_embarcador/pickup/mypudo_url");
+  }
+
+  public function getMyPudoShipperId() {
+    return $this->getConfigValue("jadlog_embarcador/pickup/mypudo_shipper_id");
+  }
+
+  public function getMyPudoKey() {
+    return $this->getConfigValue("jadlog_embarcador/pickup/mypudo_key");
+  }
+
 }
 ?>

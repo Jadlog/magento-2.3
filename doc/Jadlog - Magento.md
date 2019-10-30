@@ -7,7 +7,7 @@
 
 # Módulo de Frete Jadlog - Magento 2.3
 
-!!! _**Versão 0.0.1 - BETA**_ !!!
+!!! _**Versão BETA**_ !!!
 
 ![Jadlog](dpd_logo.png)
 

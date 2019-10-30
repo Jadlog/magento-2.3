@@ -22,6 +22,7 @@ export TIMEZONE=${12}
 
 echo -e "\n --> Setting up repository credentials for Magento 2.\n\n"
 mkdir -p /home/vagrant/.composer
+if [ ! -f /home/vagrant/.composer/auth.json ]; then
 tee -a /home/vagrant/.composer/auth.json << EOT
 {
   "http-basic": {
@@ -32,6 +33,7 @@ tee -a /home/vagrant/.composer/auth.json << EOT
   }
 }
 EOT
+fi
 
 function install {
   echo -e "\n --> Installing Magento 2 using composer.\n\n"
@@ -61,7 +63,7 @@ function setup {
   echo "--use-rewrites=\"1\""
   echo "--backend-frontname=\"admin\""
 
-  php /var/www/html/bin/magento setup:install \
+  /var/www/html/bin/magento setup:install \
   --base-url="${BASE_URL}" \
   --db-host="localhost" \
   --db-name="magento2" \
@@ -82,15 +84,15 @@ function setup {
   cp /home/vagrant/.composer/auth.json /var/www/html/
 
   echo -e "\n --> Setting up Magento 2 on developer mode.\n\n"
-  php /var/www/html/bin/magento deploy:mode:set developer
-  php /var/www/html/bin/magento deploy:mode:show
+  /var/www/html/bin/magento deploy:mode:set developer
+  /var/www/html/bin/magento deploy:mode:show
 
 }
 
 function sample_data {
   echo -e "\n --> Deploying Magento 2 Sample Data.\n\n"
-  php /var/www/html/bin/magento sampledata:deploy
-  php /var/www/html/bin/magento setup:upgrade
+  /var/www/html/bin/magento sampledata:deploy
+  /var/www/html/bin/magento setup:upgrade
 }
 
 install

@@ -32,8 +32,9 @@ class Valor {
   }
 
   public function __construct($helper, $cep, $peso, $valor_declarado, $modalidade) {
+    $cep_array = (is_array($cep) ? $cep: [$cep]);
     $this->helperData = $helper;
-    $this->cepdes = $cep;
+    $this->cepdes = array_unique($cep_array);
     $this->cepori = $this->helperData->getRemetenteCep();
     $this->cnpj = $this->helperData->getRemetenteCNPJ();
     $this->conta = $this->helperData->getContaCorrente();
@@ -47,24 +48,14 @@ class Valor {
     $this->token = $this->helperData->getToken();
   }
 
+  /*TODO: cache de valores de frete */
   public function getData() {
-    $data = [
-      "frete" => [
-        0 => [
-          "cepdes" => $this->cepdes,
-          "cepori" => $this->cepori,
-          "cnpj" => $this->cnpj,
-          "conta" => $this->conta,
-          "contrato" => $this->contrato,
-          "modalidade" => $this->modalidade,
-          "peso" => $this->peso,
-          "tpentrega" => $this->tpentrega,
-          "tpseguro" => $this->tpseguro,
-          "vldeclarado" => $this->vldeclarado
-        ]
-      ]
-    ];
+    //return $this->getBulkRealData();
+    //return $this->getFakeData();
+    return $this->getRealData();
+  }
 
+  private function getDataFromService($data) {
     $data_string = json_encode($data);
     $ch = curl_init($this->freteurl);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -81,11 +72,68 @@ class Valor {
 
     //log
     $message = [
+      'data' => print_r($data, true),
+      '$this->freteurl' => $this->freteurl,
       'result' => print_r($result, true)
     ];
     $this->writeLog(date('Y-m-d H:i:s'), $message);
     //log
 
+    return $result;
+  }
+
+  private function getRealData() {
+    $result = [];
+    foreach($this->cepdes as $cep) {
+      $data = [
+        "frete" => [[
+          "cepdes" => $cep,
+          "cepori" => $this->cepori,
+          "cnpj" => $this->cnpj,
+          "conta" => $this->conta,
+          "contrato" => $this->contrato,
+          "modalidade" => $this->modalidade,
+          "peso" => $this->peso,
+          "tpentrega" => $this->tpentrega,
+          "tpseguro" => $this->tpseguro,
+          "vldeclarado" => $this->vldeclarado
+        ]]
+      ];
+      $result[$cep] = $this->getDataFromService($data);
+    }
+    return $result;
+  }
+
+  private function getBulkRealData() {
+    $data = [];
+    foreach($this->cepdes as $cep) {
+      array_push($data, [
+        "cepdes" => $cep,
+        "cepori" => $this->cepori,
+        "cnpj" => $this->cnpj,
+        "conta" => $this->conta,
+        "contrato" => $this->contrato,
+        "modalidade" => $this->modalidade,
+        "peso" => $this->peso,
+        "tpentrega" => $this->tpentrega,
+        "tpseguro" => $this->tpseguro,
+        "vldeclarado" => $this->vldeclarado
+      ]);
+    }
+    $data = [
+      "frete" => $data
+    ];
+    return $this->getDataFromService($data);
+  }
+
+  private function getFakeData() {
+    $result = [];
+    foreach($this->cepdes as $cep) {
+      preg_match_all("/\d+/",$cep,$cep_a);
+      $cep_i = join($cep_a[0],"");
+      $valor = (intval($cep_i) % 10000) * 0.01 * $this->peso;
+      $result[$cep] = ['frete' => [ 0 => ['vltotal' => $valor]]];
+    }
     return $result;
   }
 }

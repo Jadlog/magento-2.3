@@ -6,9 +6,10 @@ define(
     'mage/storage',
     'Magento_Checkout/js/model/shipping-service',
     'Jadlog_Embarcador/js/view/checkout/shipping/model/pudo-registry',
-    'Magento_Checkout/js/model/error-processor'
+    'Magento_Checkout/js/model/error-processor',
+    'jquery'
   ],
-  function(resourceUrlManager, quote, customer, storage, shippingService, pudoRegistry, errorProcessor) {
+  function(resourceUrlManager, quote, customer, storage, shippingService, pudoRegistry, errorProcessor, $) {
     'use strict';
 
     return {
@@ -18,13 +19,15 @@ define(
        */
       getPudoList: function(address, form) {
         shippingService.isLoading(true);
+        $('body').trigger('processStart');
         var cacheKey = address.getCacheKey(),
           cache = pudoRegistry.get(cacheKey),
-          serviceUrl = resourceUrlManager.getUrlForPudoList(quote);
+          serviceUrl = resourceUrlManager.getUrlForGetPudoList(quote);
 
         if (cache) {
           form.setPudoList(cache);
           shippingService.isLoading(false);
+          $('body').trigger('processStop');
         } else {
           storage.get(
             serviceUrl, false
@@ -40,10 +43,32 @@ define(
           ).always(
             function() {
               shippingService.isLoading(false);
+              $('body').trigger('processStop');
             }
           );
         }
+      },
+
+      setPudo: function(pudo) {
+        $('body').trigger('processStart');
+        var serviceUrl = resourceUrlManager.getUrlForSetPudo();
+        var data = {}
+        data.pudo = JSON.parse(pudo);
+        data = JSON.stringify(data)
+
+        storage.post(
+          serviceUrl, data
+        ).fail(
+          function(response) {
+            errorProcessor.process(response);
+          }
+        ).always(
+          function() {
+            $('body').trigger('processStop');
+          }
+        );
       }
+
     };
   }
 );

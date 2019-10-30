@@ -44,7 +44,7 @@ implements \Magento\Shipping\Model\Carrier\CarrierInterface {
 		$f = new FreteValor($this->_helperData, $cep, $peso, $valor_declarado, $modalidade);
 		$r = $f->getData();
 
-		$shippingPrice = $r['frete'][0]['vltotal'];
+		$shippingPrice = $r[$cep]['frete'][0]['vltotal'];
 
 		return $shippingPrice;
 	}

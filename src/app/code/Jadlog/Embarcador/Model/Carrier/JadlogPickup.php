@@ -4,6 +4,7 @@ namespace Jadlog\Embarcador\Model\Carrier;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Rate\Result;
 use Jadlog\Embarcador\Integracao\Frete\Valor as FreteValor;
+use Magento\Checkout\Model\Session as CheckoutSession;
 
 class JadlogPickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier
 implements \Magento\Shipping\Model\Carrier\CarrierInterface {
@@ -19,6 +20,7 @@ implements \Magento\Shipping\Model\Carrier\CarrierInterface {
 	protected $_rateMethodFactory;
 	protected $_logger;
 	protected $_helperData;
+	protected $_checkoutSession;
 
 	public function __construct(
 		\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -27,12 +29,14 @@ implements \Magento\Shipping\Model\Carrier\CarrierInterface {
 		\Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
 		\Jadlog\Embarcador\Helper\Data $helperData,
 		\Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
+		CheckoutSession $checkoutSession,
 		array $data = []
 	) {
 		$this->_rateResultFactory = $rateResultFactory;
 		$this->_rateMethodFactory = $rateMethodFactory;
 		$this->_logger = $logger;
 		$this->_helperData = $helperData;
+		$this->_checkoutSession = $checkoutSession;
 		parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
 	}
 
@@ -44,7 +48,7 @@ implements \Magento\Shipping\Model\Carrier\CarrierInterface {
 		$f = new FreteValor($this->_helperData, $cep, $peso, $valor_declarado, $modalidade);
 		$r = $f->getData();
 
-		$shippingPrice = $r['frete'][0]['vltotal'];
+		$shippingPrice = $r[$cep]['frete'][0]['vltotal'];
 
 		return $shippingPrice;
 	}
@@ -55,15 +59,31 @@ implements \Magento\Shipping\Model\Carrier\CarrierInterface {
 			get_class($this) . '->' . __FUNCTION__, [
 				$request->getDestPostcode(),
 				strlen($request->getDestPostcode()),
-				$this->_helperData->getPickupHabilitado()
+				$this->_helperData->getPickupHabilitado(),
+				$this->_checkoutSession->getJadlogPudoData()
 			]
 		);
 
 		if (!$this->_helperData->getPickupHabilitado() || (strlen($request->getDestPostcode()) < 8)) {
 			return false;
 		}
-		$cep = $this->_helperData->getCep($request->getDestPostcode());
+
+		//verifica se há pudo escolhido
+		$pudo = json_decode($this->_checkoutSession->getJadlogPudoData());
+		$cep_destino = $request->getDestPostcode();
+		if($pudo) {
+			$cep = $pudo->Zipcode;
+		}
+		$cep = $this->_helperData->getCep($cep_destino);
+
 		if (empty($cep["error"])) {
+			/*
+			$this->_logger->debug(
+				get_class($this) . '->' . __FUNCTION__, [
+					"Utilizando o cep: {$cep['cep']}"
+				]
+			);
+			*/
 			// @var \Magento\Shipping\Model\Rate\Result $result
 			$result = $this->_rateResultFactory->create();
 
@@ -72,26 +92,26 @@ implements \Magento\Shipping\Model\Carrier\CarrierInterface {
 
 			$method->setCarrier($this->_code);
 			$method->setCarrierTitle($this->getConfigData('title'));
-
 			$method->setMethod($this->_code);
 			$method->setMethodTitle($this->getConfigData('name'));
 
-			$amount = $this->getShippingPrice(
+      $peso = $request->getPackageWeight();
+			$valor_declarado = $request->getPackageValue();
+
+      $amount = $this->getShippingPrice(
 				$cep['cep'],
-				$request->getPackageWeight(),
-				$request->getPackageValue(),
+				$peso,
+				$valor_declarado,
 				$this->_helperData->getCodigoPickup()
 			);
 
-
 			$method->setPrice($amount);
 			$method->setCost($amount);
-
 			$result->append($method);
 
 			return $result;
 		} else {
-			$message = "Digite o CEP corretamente. CEP informado: " . $request->getDestPostcode();
+			$message = "Digite o CEP corretamente. CEP informado: " . $cep_destino;
 			$error = $this->_rateErrorFactory->create();
 			$error->setCarrier($this->_code)
 			  ->setCarrierTitle($this->getConfigData('title'))

@@ -8,4 +8,11 @@
       <resource ref="anonymous" />
     </resources>
   </route>
+  <!-- Setting Pudo Data on CheckoutSession -->
+  <route url="/V1/jadlog_embarcador/set-pudo" method="POST">
+    <service class="Jadlog\Embarcador\Api\PudoManagementInterface" method="setPudo"/>
+    <resources>
+      <resource ref="anonymous" />
+    </resources>
+  </route>
 </routes>

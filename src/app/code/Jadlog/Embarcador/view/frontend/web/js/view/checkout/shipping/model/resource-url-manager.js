@@ -8,13 +8,21 @@ define(
   function(customer, quote, urlBuilder, utils) {
     "use strict";
     return {
-      getUrlForPudoList: function(quote, limit) {
+      getUrlForGetPudoList: function(quote, limit) {
         var params = {
           postcode: quote.shippingAddress().postcode,
           city: quote.shippingAddress().city
         };
         var urls = {
           'default': '/jadlog_embarcador/get-pudo-list/:postcode/:city'
+        };
+        return this.getUrl(urls, params);
+      },
+
+      getUrlForSetPudo: function() {
+        var params = {};
+        var urls = {
+          'default': '/jadlog_embarcador/set-pudo'
         };
         return this.getUrl(urls, params);
       },

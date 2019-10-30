@@ -2,11 +2,13 @@
 namespace Jadlog\Embarcador\Observer\Model;
 use Magento\Framework\Event\ObserverInterface;
 use Jadlog\Embarcador\Model\QuoteFactory;
+use Magento\Checkout\Model\Session as CheckoutSession;
 
 class Quote implements ObserverInterface {
 
   protected $_helperData;
   protected $_quoteFactory;
+  protected $_checkoutSession;
 
   private function writeLog($ident, $msg) {
     // tail -f /var/www/html/var/log/plugintest.log
@@ -21,11 +23,13 @@ class Quote implements ObserverInterface {
 
   public function __construct(
     \Jadlog\Embarcador\Helper\Data $helperData,
-    QuoteFactory $quoteFactory
+    QuoteFactory $quoteFactory,
+    CheckoutSession $checkoutSession
   ) {
     //$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     $this->_helperData = $helperData;
     $this->_quoteFactory = $quoteFactory;
+    $this->_checkoutSession = $checkoutSession;
   }
 
   public function execute(\Magento\Framework\Event\Observer $observer) {
@@ -44,8 +48,8 @@ class Quote implements ObserverInterface {
 
       $pudo = '';
       if ($this->_helperData->isEntregaJadlogPickup($method)) {
-        $pudo = $quote->getShippingAddress()->getJadlogPudo();
-        $order->getShippingAddress()->setJadlogPudo($quote->getShippingAddress()->getJadlogPudo());
+        $pudo = $this->_checkoutSession->getJadlogPudoData();
+        $order->getShippingAddress()->setJadlogPudo($pudo);
       }
 
       $message = [

@@ -6,9 +6,10 @@
 [//]: # (Many thanks to peek for animated gif generation: https://github.com/phw/peek)
 # Extensão de Frete Jadlog - Magento 2.3
 
-!!! _**Versão 0.0.1 - BETA**_ !!!
+[//]: # (Versão em: Jadlog/Embarcador/etc/module.xml)
+!!! _**Versão 0.0.2 - BETA**_ !!!
 
-*Essa é uma versão preliminar, mais funcionalidades serão incluídas em breve. Conulte o [Changelog](changelog.md) para maiores informações*
+*Essa é uma versão preliminar, mais funcionalidades serão incluídas em breve. Consulte o [Changelog](changelog.md) para maiores informações*
 
 ## Manual de instalação e uso
 * [Manual de Instalação e Utilização](doc/Jadlog%20-%20Magento.md)
@@ -24,9 +25,9 @@ Na pasta [/dev](/dev) encontram-se os arquivos para configuração do ambiente p
 
 ## Licença
 
-[Open Software License (OSL 3.0)](https://opensource.org/licenses/osl-3.0.php). 
+[Open Software License (OSL 3.0)](https://opensource.org/licenses/osl-3.0.php).
 
-Texto completo em [LICENSE.txt](LICENSE.txt) 
+Texto completo em [LICENSE.txt](LICENSE.txt).
 
 ## Desenvolvimento
 * [Jadlog](http://www.jadlog.com.br) - *Uma empresa DPDgroup*
