@@ -10,17 +10,6 @@ class Order implements ObserverInterface {
   protected $_orderFactory;
   protected $_quoteFactory;
 
-  private function writeLog($ident, $msg) {
-    // tail -f /var/www/html/var/log/plugintest.log
-    $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/plugintest.log');
-    $logger = new \Zend\Log\Logger();
-    $logger->addWriter($writer);
-    ob_start();
-    $message = ["Jadlog\Embarcador\Observer\Model\Order $ident" => $msg];
-    print_r($message);
-    $logger->info(ob_get_clean());
-  }
-
   public function __construct(
     \Jadlog\Embarcador\Helper\Data $helperData,
     SalesOrderFactory $orderFactory,
@@ -49,7 +38,7 @@ class Order implements ObserverInterface {
       "customerId" => $customerId,
       "pudo" => $pudo
     ];
-    $this->writeLog(date('Y-m-d H:i:s'), $message);
+    $this->_helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
 
     if ($order->getId() && $this->_helperData->isEntregaJadlog($order->getShippingMethod())) {
       $jadlog_sales_order = $this->_orderFactory->create();
@@ -66,7 +55,7 @@ class Order implements ObserverInterface {
         '$jadlog_sales_order->getOrderId()' => $jadlog_sales_order->getOrderId(),
         '$jadlog_sales_order->getPickup()' => $jadlog_sales_order->getPickup()
       ];
-      $this->writeLog(date('Y-m-d H:i:s'), $message);
+      $this->_helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
     }
 
     return $this;

@@ -10,17 +10,6 @@ class Quote implements ObserverInterface {
   protected $_quoteFactory;
   protected $_checkoutSession;
 
-  private function writeLog($ident, $msg) {
-    // tail -f /var/www/html/var/log/plugintest.log
-    $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/plugintest.log');
-    $logger = new \Zend\Log\Logger();
-    $logger->addWriter($writer);
-    ob_start();
-    $message = ["Jadlog\Embarcador\Observer\Model\Quote $ident" => $msg];
-    print_r($message);
-    $logger->info(ob_get_clean());
-  }
-
   public function __construct(
     \Jadlog\Embarcador\Helper\Data $helperData,
     QuoteFactory $quoteFactory,
@@ -40,7 +29,7 @@ class Quote implements ObserverInterface {
       '$method' => $method,
       '$this->_helperData->isEntregaJadlog($method)' => $this->_helperData->isEntregaJadlog($method)
     ];
-    $this->writeLog(date('Y-m-d H:i:s'), $message);
+    $this->_helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
 
 
     if ($this->_helperData->isEntregaJadlog($method)) {
@@ -58,7 +47,7 @@ class Quote implements ObserverInterface {
         '$quote->getId()' => $quote->getId(),
         "pudo" => $pudo
       ];
-      $this->writeLog(date('Y-m-d H:i:s'), $message);
+      $this->_helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
 
       if ($quote->getId()) {
         $jadlog_quote = $this->_quoteFactory->create();
@@ -74,7 +63,7 @@ class Quote implements ObserverInterface {
           '$jadlog_quote->getQuoteId()' => $jadlog_quote->getQuoteId(),
           '$jadlog_quote->getPickup()' => $jadlog_quote->getPickup()
         ];
-        $this->writeLog(date('Y-m-d H:i:s'), $message);
+        $this->_helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
       }
     }
     return $this;

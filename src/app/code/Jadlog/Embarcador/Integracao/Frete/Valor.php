@@ -19,18 +19,6 @@ class Valor {
   private $freteurl;
   private $token;
 
-
-  private function writeLog($ident, $msg) {
-    // tail -f /var/www/html/var/log/plugintest.log
-    $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/plugintest.log');
-    $logger = new \Zend\Log\Logger();
-    $logger->addWriter($writer);
-    ob_start();
-    $message = ["Jadlog\Embarcador\Integracao\Frete\Valor $ident" => $msg];
-    print_r($message);
-    $logger->info(ob_get_clean());
-  }
-
   public function __construct($helper, $cep, $peso, $valor_declarado, $modalidade) {
     $cep_array = (is_array($cep) ? $cep: [$cep]);
     $this->helperData = $helper;
@@ -76,7 +64,7 @@ class Valor {
       '$this->freteurl' => $this->freteurl,
       'result' => print_r($result, true)
     ];
-    $this->writeLog(date('Y-m-d H:i:s'), $message);
+    $this->helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
     //log
 
     return $result;

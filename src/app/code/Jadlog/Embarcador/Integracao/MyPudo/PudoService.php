@@ -21,18 +21,6 @@ class PudoService {
   private $category;
   private $holiday_tolerant;
 
-
-  private function writeLog($ident, $msg) {
-    // tail -f /var/www/html/var/log/plugintest.log
-    $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/plugintest.log');
-    $logger = new \Zend\Log\Logger();
-    $logger->addWriter($writer);
-    ob_start();
-    $message = ["Jadlog\Embarcador\Integracao\MyPudo\PudoService $ident" => $msg];
-    print_r($message);
-    $logger->info(ob_get_clean());
-  }
-
   public function __construct($helper, $zipcode, $city) {
     $this->helperData = $helper;
     $this->mypudo_url = $this->helperData->getMyPudoURL();
@@ -86,7 +74,7 @@ class PudoService {
       '$this->mypudo_url' => $this->mypudo_url
       //'result' => print_r($result, true)
     ];
-    $this->writeLog(date('Y-m-d H:i:s'), $message);
+    $this->helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
     //log
 
     if ($err) {

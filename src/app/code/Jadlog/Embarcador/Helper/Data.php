@@ -117,5 +117,15 @@ class Data extends AbstractHelper {
     return $this->getConfigValue("jadlog_embarcador/pickup/mypudo_key");
   }
 
+  public function writeLog($ident, $msg) {
+    // tail -f /var/www/html/var/log/jadlog_embarcador.log
+    $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/jadlog_embarcador.log');
+    $logger = new \Zend\Log\Logger();
+    $logger->addWriter($writer);
+    ob_start();
+    $message = ["$ident" => $msg];
+    print_r($message);
+    $logger->info(ob_get_clean());
+  }
 }
 ?>
