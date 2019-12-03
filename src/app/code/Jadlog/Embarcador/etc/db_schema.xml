@@ -23,6 +23,7 @@
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
     <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Quote ID"/>
     <column xsi:type="varchar" name="pickup" nullable="true" length="255" comment="Pickup Point"/>
+    <column xsi:type="varchar" name="pudo_id" nullable="true" length="255" comment="Pickup Point Id"/>
     <constraint xsi:type="primary" referenceId="PRIMARY">
       <column name="id"/>
     </constraint>
@@ -35,6 +36,8 @@
     <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
     <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Order ID"/>
     <column xsi:type="varchar" name="pickup" nullable="true" length="255" comment="Pickup Point"/>
+    <column xsi:type="varchar" name="pudo_id" nullable="true" length="255" comment="Pickup Point Id"/>
+    <column xsi:type="varchar" name="campos_dfe" nullable="true" length="255" comment="Campos DFE"/>
     <column xsi:type="varchar" name="codigo" nullable="true" length="255" comment="Codigo Pedido Coleta"/>
     <column xsi:type="varchar" name="shipment_id" nullable="true" length="255" comment="Shipment Id"/>
     <column xsi:type="varchar" name="status" nullable="true" length="255" comment="Status Pedido Coleta"/>
@@ -45,5 +48,17 @@
     <constraint xsi:type="unique" referenceId="JADLOG_SALES_ORDER_ORDER_ID">
       <column name="order_id"/>
     </constraint>
+    <index referenceId="JADLOG_SALES_ORDER_PUDO_ID" indexType="btree">
+        <column name="pudo_id"/>
+    </index>
+    <index referenceId="JADLOG_SALES_ORDER_CAMPOS_DFE" indexType="btree">
+        <column name="campos_dfe"/>
+    </index>
+    <index referenceId="JADLOG_SALES_ORDER_ORDER_CODIGO" indexType="btree">
+        <column name="codigo"/>
+    </index>
+    <index referenceId="JADLOG_SALES_ORDER_ORDER_SHIPMENT_ID" indexType="btree">
+        <column name="shipment_id"/>
+    </index>
   </table>
 </schema>

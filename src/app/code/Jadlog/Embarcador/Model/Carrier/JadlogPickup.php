@@ -72,7 +72,7 @@ implements \Magento\Shipping\Model\Carrier\CarrierInterface {
     $pudo = json_decode($this->_checkoutSession->getJadlogPudoData());
     $cep_destino = $request->getDestPostcode();
     if($pudo) {
-      $cep = $pudo->Zipcode;
+      $cep_destino = $pudo->Zipcode;
     }
     $cep = $this->_helperData->getCep($cep_destino);
 

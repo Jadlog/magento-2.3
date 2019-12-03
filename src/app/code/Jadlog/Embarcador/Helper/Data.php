@@ -14,10 +14,63 @@ class Data extends AbstractHelper {
     return 9; #.COM = Expresso
   }
 
+  public function getModalidadeByShippingMethod($shippingMethod) {
+    switch($shippingMethod) {
+      case JadlogExpresso::carrierMethod(): return $this->getCodigoExpresso();
+      case JadlogPickup::carrierMethod(): return $this->getCodigoPickup();
+      default: return false;
+    }
+  }
+
+  public function extraiNumeros($x) {
+    return preg_replace("/\D/", "", $x);
+  }
+
+  public function extraiDFE($d) {
+    $error = "";
+    $dfes = [];
+    $dfeMsgErroDefault = 'Campos DFE inválido! Separar campos por "," e DFEs por "|". Ex. com 2 DFEs: "cfop,danfeCte,nrDoc,serie,tpDocumento,valor|cfop,danfeCte,nrDoc,serie,tpDocumento,valor". Com ex. de dados: "6909,null,DECLARACAO,null,2,20.2|6909,null,DECLARACAO,null,2,20.2"';
+
+    if (empty($d)) {
+      $error = $dfeMsgErroDefault;
+    } else {
+      $dfesToParser = explode('|', $d);
+      foreach ($dfesToParser as $dfe) {
+        if (strlen(trim($dfe)) == 0) {
+          $error = $dfeMsgErroDefault;
+          break;
+        }
+        $fs = explode(',', $dfe);
+        if (count($fs) != 6) {
+          $error = $dfeMsgErroDefault;
+          break;
+        }
+        foreach ($fs as $f) {
+          if (strlen(trim($f)) == 0) {
+            $error = $dfeMsgErroDefault;
+            break;
+          }
+        }
+        if ($error) {
+          break;
+        }
+        $dfes[] = [
+          'cfop'        => trim($fs[0]) == "null" ? null : trim($fs[0]),
+          'danfeCte'    => trim($fs[1]) == "null" ? null : trim($fs[1]),
+          'nrDoc'       => trim($fs[2]) == "null" ? null : trim($fs[2]),
+          'serie'       => trim($fs[3]) == "null" ? null : trim($fs[3]),
+          'tpDocumento' => trim($fs[4]) == "null" ? null : trim($fs[4]),
+          'valor'       => trim($fs[5]) == "null" ? null : trim($fs[5])
+        ];
+      }
+    }
+    return ["error" => $error, "dfes" => $dfes];
+  }
+
   public function getCep($cep) {
     $error = "";
     //extrai somente os números
-    $cepNumbers = preg_replace("/\D/", "", $cep);
+    $cepNumbers = $this->extraiNumeros($cep);
     if (strlen($cepNumbers) != 8) {
       $error = "CEP inválido. O CEP deve conter 8 algarismos.";
       $cepNumbers = $cep;
@@ -93,12 +146,56 @@ class Data extends AbstractHelper {
     return $this->getConfigValue("jadlog_embarcador/geral/tracking_url");
   }
 
+  public function getRemetenteNome() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/nome");
+  }
+
   public function getRemetenteCNPJ() {
     return $this->getConfigValue("jadlog_embarcador/remetente/cnpj");
   }
 
   public function getRemetenteIE() {
     return $this->getConfigValue("jadlog_embarcador/remetente/ie");
+  }
+
+  public function getRemetenteContato() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/contato");
+  }
+
+  public function getRemetenteTelefone() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/telefone");
+  }
+
+  public function getRemetenteCelular() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/celular");
+  }
+
+  public function getRemetenteEmail() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/email");
+  }
+
+  public function getRemetenteEndereco() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/endereco");
+  }
+
+  public function getRemetenteNumero() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/numero");
+  }
+
+  public function getRemetenteComplemento() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/complemento");
+  }
+
+  public function getRemetenteUF() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/uf");
+  }
+
+  public function getRemetenteCidade() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/cidade");
+  }
+
+  public function getRemetenteBairro() {
+    return $this->getConfigValue("jadlog_embarcador/remetente/bairro");
   }
 
   public function getRemetenteCep() {

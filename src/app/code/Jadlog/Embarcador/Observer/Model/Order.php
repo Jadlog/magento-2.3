@@ -29,7 +29,9 @@ class Order implements ObserverInterface {
     $jadlog_quote->load($order->getQuoteId(), 'quote_id');
 
     $pudo = $jadlog_quote->getPickup();
+    $pudo_id = $jadlog_quote->getPudoId();
 
+    //log
     $message = [
       '$this->_helperData->isEntregaJadlog($order->getShippingMethod())' => $this->_helperData->isEntregaJadlog($order->getShippingMethod()),
       '$order->getShippingMethod()' => $order->getShippingMethod(),
@@ -39,6 +41,7 @@ class Order implements ObserverInterface {
       "pudo" => $pudo
     ];
     $this->_helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
+    //log
 
     if ($order->getId() && $this->_helperData->isEntregaJadlog($order->getShippingMethod())) {
       $jadlog_sales_order = $this->_orderFactory->create();
@@ -48,12 +51,14 @@ class Order implements ObserverInterface {
       $jadlog_sales_order->
         setOrderId($order->getId())->
         setPickup($pudo)->
+        setPudoId($pudo_id)->
         save();
       $message = [
         'salvar jadlog_sales_order' => 'sim',
         '$order->getId()' => $order->getId(),
         '$jadlog_sales_order->getOrderId()' => $jadlog_sales_order->getOrderId(),
-        '$jadlog_sales_order->getPickup()' => $jadlog_sales_order->getPickup()
+        '$jadlog_sales_order->getPickup()' => $jadlog_sales_order->getPickup(),
+        '$jadlog_sales_order->getPudoId()' => $jadlog_sales_order->getPudoId()
       ];
       $this->_helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
     }

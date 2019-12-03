@@ -1,7 +1,10 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
 #encoding: utf-8
 
 #install needed plugins
-required_plugins = %w(vagrant-hostmanager vagrant-timezone)
+required_plugins = %w(vagrant-hostmanager vagrant-timezone vagrant-vbguest)
 plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
 if not plugins_to_install.empty?
   puts "Installing plugins: #{plugins_to_install.join(' ')}"
@@ -12,6 +15,29 @@ if not plugins_to_install.empty?
   end
 end
 
+#for setting local ip on host
+$logger = Log4r::Logger.new('vagrantfile')
+def read_ip_address(machine)
+  command =  "ip a | grep 'inet' | grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $2 }' | cut -f1 -d\"/\""
+  result  = ""
+
+  $logger.info "Processing #{ machine.name } ... "
+
+  begin
+    # sudo is needed for ifconfig
+    machine.communicate.sudo(command) do |type, data|
+      result << data if type == :stdout
+    end
+    $logger.info "Processing #{ machine.name } ... success"
+  rescue
+    result = "# NOT-UP"
+    $logger.info "Processing #{ machine.name } ... not running"
+  end
+
+  # the second inet is more accurate
+  result.chomp.split("\n").select { |hash| hash != "" }[1]
+end
+
 # read YAML config file
 config_file = YAML.load_file("config.yml")
 
@@ -19,6 +45,32 @@ Vagrant.configure("2") do |config|
   # Base image for VM
   #config.vm.box = "bento/ubuntu-18.04"
   config.vm.box = "ubuntu/bionic64"
+
+  #hostmanager
+  #Fonte: https://github.com/devopsgroup-io/vagrant-hostmanager/issues/86
+  # Update /etc/hosts on all active VMs
+  config.hostmanager.enabled = true
+  # Update host machine's /etc/hosts
+  config.hostmanager.manage_host = true
+  # Update guest machine's /etc/hosts
+  config.hostmanager.manage_guest = true
+  # Don't ignore private IPs
+  config.hostmanager.ignore_private_ip = false
+  # Include offline VMs (rather than just active ones)
+  config.hostmanager.include_offline = true
+  if Vagrant.has_plugin?("HostManager")
+    config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+      read_ip_address(vm)
+    end
+  end
+
+  if config_file["private_network_ip"] then
+    # Configure private network
+    config.vm.network "private_network", ip: config_file["private_network_ip"]
+  else
+    # Configure private network by DHCP
+    config.vm.network "private_network", type: "dhcp"
+  end
 
   #define machine
   config.vm.define config_file["virtualbox_name"]
@@ -35,29 +87,6 @@ Vagrant.configure("2") do |config|
 
   #timezone
   config.timezone.value = :host
-
-  # Configure private network by DHCP
-  #config.vm.network "private_network", type: "dhcp"
-
-  # Configure private network
-  config.vm.network "private_network", ip: config_file["private_network_ip"]
-
-  # Update /etc/hosts on all active VMs
-  config.hostmanager.enabled = true
-
-  # Update host machine's /etc/hosts
-  config.hostmanager.manage_host = true
-
-  # Don't ignore private IPs
-  config.hostmanager.ignore_private_ip = false
-
-  # Include offline VMs (rather than just active ones)
-  config.hostmanager.include_offline = true
-
-  # Use IP resolver to get DHCP configured address
-  config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-    `vagrant ssh -c "hostname -I"`.split.last
-  end
 
   #synced folders
   if config_file["synced_folders"] then
@@ -114,7 +143,7 @@ Vagrant.configure("2") do |config|
     ]
   end
 
-  #enable composer to install jadlog embarcador from source
-  config.vm.provision "shell", path: "enable_composer.sh", privileged: false
+  #bind source code folder inside Magento's folder
+  config.vm.provision "shell", path: "bind-extensions-Jadlog_Embarcador.sh"
 
 end

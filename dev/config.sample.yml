@@ -8,16 +8,21 @@ hostname: magento.dev.local
 
 root_db_password: mypass
 
-private_network_ip: "192.168.50.5"
+#if you want DHCP:
+#private_network_ip: false #for dhcp
+#OR if you want an specific IP:
+private_network_ip: "192.168.50.5" #specific IP
 
 synced_folders:
   nfs: true
   default_disabled: true
   folders:
+    #DONT CHANGE THE FOLLOWING
     - ori: "../src/"
       dst: "/src/"
     - ori: "../dev/"
       dst: "/development/"
+    #YOU MAY ADD OTHERS, IF NEEDED
 
 ssmtp:
   test_recipient: youremail@yourdomain.com

@@ -2,3 +2,4 @@
 *.log
 config.yml
 API_JADLOG*.pdf
+*.sql

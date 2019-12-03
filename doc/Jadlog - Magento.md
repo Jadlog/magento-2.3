@@ -25,7 +25,9 @@
     - [Dados do serviço pickup](#dados-do-servico-pickup)
     - [Dados da loja \(remetente\)](#dados-da-loja-remetente)
   - [Nota sobre cubagem](#nota-sobre-cubagem)
+  - [Nota sobre dados do cliente](#nota-sobre-dados-do-cliente)
   - [Forma de entrega](#forma-de-entrega)
+  - [Atenção: necessário habilitar *Tax/VAT Number*](#atencao-necessario-habilitar-taxvat-number)
 - [Utilização pelos clientes](#utilizacao-pelos-clientes)
   - [Escolha do ponto de retirada](#escolha-do-ponto-de-retirada)
   - [Rastreamento](#rastreamento)
@@ -202,11 +204,13 @@ Bairro da loja.
 - **CEP**:  
 CEP da loja (somente números).
 
-
 <a id="nota-sobre-cubagem"></a>
 ### Nota sobre cubagem
 Todos os produtos devem ser cadastrados incluindo o peso a ser taxado. Se o peso cubado do produto for maior que o peso em kg, favor informar o peso cubado. O módulo não irá calcular o peso cubado.
 
+<a id="nota-sobre-dados-do-cliente"></a>
+### Nota sobre dados do cliente
+Esta extensão considera que o número de celular do cliente é salvo no campo *Fax* do cadastro.
 
 <a id="forma-de-entrega"></a>
 ### Forma de entrega
@@ -216,6 +220,14 @@ Para habilitar a escolha de frete Jadlog o último passo é ativar a forma de en
 
 Deve-se escolher "Habilitar - Yes" para as formas de entrega "Jadlog Expresso" e "Jadlog Pickup" (o padrão é vir habilitado). No campo "Sort Order" pode-se definir a ordem em as formas de entrega vão aparecer. Após configurar clique em *Save Config* para gravar.
 
+<a id="atencao-necessario-habilitar-taxvat-number"></a>
+### Atenção: necessário habilitar *Tax/VAT Number*
+O equivalente ao "CPF" é o *Tax/VAT Number* e deve ser obrigatório no cadastro de clientes.
+Para tornar obrigatório, deve-se acessar *Stores -> Configuration*, submenu *Customers -> Customer Configuration*. Na seção *Name and Address Options* deve-se habilitar a opção *Show Tax/VAT Number* como *Required*.
+
+![Configuração de clientes](StoresConfigurationCustomer.png)
+
+![Configuração de clientes - habilitar VAT](StoresConfigurationCustomerVAT.png)
 
 <a id="utilizacao-pelos-clientes"></a>
 ## Utilização pelos clientes
@@ -233,6 +245,46 @@ Caso o cliente escolha como forma de entrega a modalidade "Jadlog - Retire em um
 
 <a id="preencher-dados-fiscais"></a>
 ### Preencher dados fiscais
+Os dados fiscais do pedido são informados no campo "Campos DFE" no seguinte padrão:
+
+```
+cfop1,danfeCte1,nrDoc1,serie1,tpDocumento1,valor1|cfop2,danfeCte2,nrDoc2,serie2,tpDocumento2,valor2|<...>|cfop<n>,danfeCte<n>,nrDoc<n>,serie<n>,tpDocumento<n>,valor<n>
+```
+
+Cada documento fiscal do pedido é representado por uma sequência *cfop,danfeCte,nrDoc,serie,tpDocumento,valor*. Caso seja necessário enviar mais de um documento fiscal por pedido, separar cada conjunto de dados referente a um documento fiscal pelo caracter *"|"*.
+
+Detalhes do documento fiscal:
+- cfop  
+Código Fiscal de Operações e Prestações (CFOP)
+
+- danfeCte  
+Número do DANFE (Documento Auxiliar da Nota Fiscal Eletrônica). Caso não exista preencher com *null*.
+
+- nrDoc  
+Número do documento fiscal. Caso não exista preencher como *DECLARACAO*.
+
+- serie  
+Série do documento fiscal. Caso não exista preencher com *null*.
+
+- tpDocumento  
+Preencher de acordo com o tipo de documento fiscal:  
+  - 0 para Declaração
+  - 1 para Nota Fiscal
+  - 2 para Nota Fiscal Eletrônica
+  - 3 para Conhecimento de Transporte Rodoviário de Cargas
+  - 4 para Conhecimento de Transporte Eletrônico 
+  - 99 para OUTROS
+
+- valor  
+Valor referente a esse documento fiscal
+
+Cada um desses valores deve ser preenchidos separados por vírgula (*","*).
+
+O exemplo abaixo mostra o envio de um pedido com duas declarações, uma no valor de R$20,20 e outra no valor de R$80,00:
+
+```
+6909,null,DECLARACAO,null,0,20.2|6909,null,DECLARACAO,null,0,80.0
+```
 
 <a id="enviar-solicitacao-de-coleta"></a>
 ### Enviar solicitação de coleta

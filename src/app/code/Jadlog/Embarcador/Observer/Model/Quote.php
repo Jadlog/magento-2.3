@@ -36,9 +36,13 @@ class Quote implements ObserverInterface {
       $quote = $observer->getQuote();
 
       $pudo = '';
+      $pudo_id = '';
       if ($this->_helperData->isEntregaJadlogPickup($method)) {
-        $pudo = $this->_checkoutSession->getJadlogPudoData();
-        $order->getShippingAddress()->setJadlogPudo($pudo);
+        $pudo_data = json_decode($this->_checkoutSession->getJadlogPudoData());
+        if($pudo_data) {
+          $pudo_id = $pudo_data->PudoId;
+          $pudo = "{$pudo_data->Name} | {$pudo_data->Location}";
+        }
       }
 
       $message = [
@@ -56,6 +60,7 @@ class Quote implements ObserverInterface {
         $jadlog_quote->
           setQuoteId($quote->getId())->
           setPickup($pudo)->
+          setPudoId($pudo_id)->
           save();
         $message = [
           'salvar jadlog_quote' => 'sim',

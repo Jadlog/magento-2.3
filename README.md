@@ -7,7 +7,8 @@
 # Extensão de Frete Jadlog - Magento 2.3
 
 [//]: # (Versão em: Jadlog/Embarcador/etc/module.xml)
-!!! _**Versão 0.0.2 - BETA**_ !!!
+[//]: # (Versão em: Jadlog/Embarcador/composer.json)
+!!! _**Versão 0.0.3 - BETA**_ !!!
 
 *Essa é uma versão preliminar, mais funcionalidades serão incluídas em breve. Consulte o [Changelog](changelog.md) para maiores informações*
 

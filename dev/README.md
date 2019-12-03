@@ -18,6 +18,7 @@
 - [Instalação](#instalacao)
 - [Solução de problemas](#solucao-de-problemas)
   - [Site ficou sem os dados de exemplo \(*sample data*\)](#site-ficou-sem-os-dados-de-exemplo-sample-data)
+  - [Erro 500 com log do Apache *PHP Fatal error:  require\(\): Failed opening required '/var/www/html/vendor/composer/../jadlog/embarcador/registration.php'*](#erro-500-com-log-do-apache-php-fatal-error-require-failed-opening-required-varwwwhtmlvendorcomposerjadlogembarcadorregistrationphp)
 - [Notas](#notas)
   - [Git no Windows](#git-no-windows)
   - [Scripts para gerenciar o módulo na máquina virtual](#scripts-para-gerenciar-o-modulo-na-maquina-virtual)
@@ -57,7 +58,10 @@ Segue exemplo de configuração:
 
     root_db_password: mypass
 
-    private_network_ip: "192.168.50.5"
+    #if you want DHCP:
+    #private_network_ip: false #for dhcp
+    #OR if you want an specific IP:
+    private_network_ip: "192.168.50.5" #specific IP
 
     synced_folders:
       nfs: true
@@ -121,7 +125,6 @@ $ vagrant up
 
 * Durante a instalação será enviado um email de teste para a conta configurada em *test_recipient* de acordo com os dados informados no arquivo *config.yml* na seção *ssmtp*. O assunto do email será algo similar a *"This is a test message from root@\<hostname\> on \<date\>"*.
 
-
 5. Acesse o site em [magento.dev.local:8000](http://magento.dev.local:8000/) e verifique as configurações do Apache e do PHP. *Caso tenha alterado o hostname no arquivo de configuração deve utilizar a URL correpondente.*
 
 6. O ambiente de desenvolvimento Magento já deve estar disponível em [magento.dev.local](http://magento.dev.local/). O *backend* pode ser acessado em [magento.dev.local/admin](http://magento.dev.local/admin/).
@@ -143,6 +146,15 @@ vagrant@magento:~$ composer -vvv
 vagrant@magento:~$ /var/www/html/bin/magento sampledata:deploy
 vagrant@magento:~$ /var/www/html/bin/magento setup:upgrade
 
+```
+
+<a id="erro-500-com-log-do-apache-php-fatal-error-require-failed-opening-required-varwwwhtmlvendorcomposerjadlogembarcadorregistrationphp"></a>
+### Erro 500 com log do Apache *PHP Fatal error:  require(): Failed opening required '/var/www/html/vendor/composer/../jadlog/embarcador/registration.php'*
+
+Ocasionalmente a máquina virtual pode não conseguir montar a pasta /var/www/html/extensions/Jadlog_Embarcador. Caso isso aconteça, além do log do Apache informar o erro acima, também ocorrerão avisos ao tentar compilar o módulo como *PHP Warning:  require(/var/www/html/vendor/composer/../jadlog/embarcador/registration.php):*. Para corrigir basta remapear as pastas com o código fonte do módulo:
+
+```
+sudo systemctl restart var-www-html-extensions-Jadlog_Embarcador.automount
 ```
 
 <a id="notas"></a>
@@ -187,9 +199,9 @@ Todos os scripts estão na pasta */development/magemodule/* da máquina virtual.
 
 - cache_clean.sh
 
-  Limpa o cache do Magento e opcionalmente recompila os módulos. Uso:
+  Limpa o cache do Magento e opcionalmente recompila/atualiza os módulos. Uso:
   ```
-  vagrant@magento:~$ /development/magemodule/cache_clean.sh [compile]
+  vagrant@magento:~$ /development/magemodule/cache_clean.sh [compile] [upgrade]
 
   ```
 
