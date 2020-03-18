@@ -11,7 +11,7 @@
         <!--tracking_site_url>http://www.jadlog.com.br/siteDpd/tracking.jad?cte={TRACKING_ID}</tracking_site_url-->
       </geral>
       <pickup>
-        <mypudo_url>http://mypudo.pickup-services.com/mypudo/mypudo.asmx/GetPudoList</mypudo_url>
+        <mypudo_url>http://www.jadlog.com.br/embarcador/api/pickup/pudos</mypudo_url>
         <mypudo_shipper_id>JAD</mypudo_shipper_id>
       </pickup>
       <remetente>

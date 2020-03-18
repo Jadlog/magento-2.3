@@ -47,7 +47,14 @@ implements \Magento\Shipping\Model\Carrier\CarrierInterface {
   private function getShippingPrice($cep, $peso, $valor_declarado, $modalidade) {
     $f = new FreteValor($this->_helperData, $cep, $peso, $valor_declarado, $modalidade);
     $r = $f->getData();
-
+    //log
+    $message = [
+      'file' => __FILE__,
+      'line' => __LINE__,
+      '$r' => print_r($r, true)
+    ];
+    $this->_helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
+    //log
     $shippingPrice = $r[$cep]['frete'][0]['vltotal'];
 
     return $shippingPrice;

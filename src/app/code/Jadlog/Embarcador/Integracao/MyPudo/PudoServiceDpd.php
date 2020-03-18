@@ -3,7 +3,7 @@ namespace Jadlog\Embarcador\Integracao\MyPudo;
 
 use \Jadlog\Embarcador\Helper\Data as HelperData;
 
-class PudoService {
+class PudoServiceDpd {
 
   private $helperData;
   private $mypudo_url;
@@ -58,7 +58,7 @@ class PudoService {
         "Connection: keep-alive",
         "Content-Length: " . strlen($data_string),
         "Content-Type: application/x-www-form-urlencoded"
-      ),
+      )
     ));
 
     $response = curl_exec($curl);

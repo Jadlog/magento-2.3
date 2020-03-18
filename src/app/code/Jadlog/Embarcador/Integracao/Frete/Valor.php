@@ -60,8 +60,11 @@ class Valor {
 
     //log
     $message = [
+      'file' => __FILE__,
+      'line' => __LINE__,
       'data' => print_r($data, true),
       '$this->freteurl' => $this->freteurl,
+      '$this->token' => $this->token,
       'result' => print_r($result, true)
     ];
     $this->helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);

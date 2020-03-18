@@ -33,6 +33,8 @@ class Order implements ObserverInterface {
 
     //log
     $message = [
+      'file' => __FILE__,
+      'line' => __LINE__,
       '$this->_helperData->isEntregaJadlog($order->getShippingMethod())' => $this->_helperData->isEntregaJadlog($order->getShippingMethod()),
       '$order->getShippingMethod()' => $order->getShippingMethod(),
       '$order->getId()' => $order->getId(),

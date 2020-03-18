@@ -148,14 +148,14 @@ Valor padrão: *http://www.jadlog.com.br/embarcador/api/tracking/consultar*
 
 - **URL Serviço "MyPudo"**:  
 Endereço para consulta dos pontos de retirada (pickup).  
-Valor padrão: *http://mypudo.pickup-services.com/mypudo/mypudo.asmx/GetPudoList*
+Valor padrão: *http://www.jadlog.com.br/embarcador/api/pickup/pudos*
 
 - **ID da embarcadora**:  
 Identificação da transportadora/embarcadora para o serviço de consulta de pontos de coleta.  
 Valor padrão: *JAD*
 
 - **Chave "MyPudo"**:  
-Chave do serviço de consulta de pontos de coleta fornecida pela Jadlog após a assinatura do contrato.
+Chave do serviço de consulta de pontos de coleta fornecida pela Jadlog após a assinatura do contrato caso necessário.
 
 <a id="dados-da-loja-remetente"></a>
 #### Dados da loja (remetente)

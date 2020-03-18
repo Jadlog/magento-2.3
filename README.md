@@ -8,7 +8,7 @@
 
 [//]: # (Versão em: Jadlog/Embarcador/etc/module.xml)
 [//]: # (Versão em: Jadlog/Embarcador/composer.json)
-!!! _**Versão 0.0.3 - BETA**_ !!!
+!!! _**Versão 0.0.4 - BETA**_ !!!
 
 *Essa é uma versão preliminar, mais funcionalidades serão incluídas em breve. Consulte o [Changelog](changelog.md) para maiores informações*
 

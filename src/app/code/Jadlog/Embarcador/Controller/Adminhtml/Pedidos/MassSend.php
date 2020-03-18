@@ -13,6 +13,8 @@ class MassSend extends AbstractPedidos {
 
     //log
     $message = [
+      'file' => __FILE__,
+      'line' => __LINE__,
       '$collectionSize' => print_r($collectionSize, true)
     ];
     $this->_helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);

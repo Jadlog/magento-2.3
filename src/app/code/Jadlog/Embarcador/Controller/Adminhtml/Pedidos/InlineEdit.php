@@ -28,6 +28,8 @@ class InlineEdit extends \Magento\Backend\App\Action {
       $postItems = $this->getRequest()->getParam('items', []);
       //log
       $message = [
+        'file' => __FILE__,
+        'line' => __LINE__,
         '$postItems' => print_r($postItems, true)
       ];
       $this->_helperData->writeLog(date('Y-m-d H:i:s') . ": " . get_class($this) . '->' . __FUNCTION__, $message);
