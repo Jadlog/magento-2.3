@@ -188,7 +188,16 @@ class PudoManagement implements PudoManagementInterface {
     return $shippingPrice;
   }
 
-  private function humanLocationJadlog($pi) {
+  private function humanLocationJadlog($pudo_inf) {
+    $pi_filler = array(
+      'endereco' => '',
+      'numero' => '',
+      'compl2' => '',
+      'bairro' => '',
+      'cidade' => '',
+      'cep' => ''
+    );
+    $pi = $pudo_inf+$pi_filler;
     $address1 = $this->_helperData->sanitizeValue($pi['endereco']);
     $streetnum = $this->_helperData->sanitizeValue($pi['numero']);
     $address2 = $this->_helperData->sanitizeValue($pi['compl2']);
@@ -196,11 +205,21 @@ class PudoManagement implements PudoManagementInterface {
     $city = $pi['cidade'];
     $zipcode = $this->_helperData->sanitizeValue($pi['cep']);
 
-    $message = "{$address1}, {$streetnum} - {$address2} - {$address3} - CEP: {$zipcode} - {$city}";
+    //$message = "{$address1}, {$streetnum} - {$address2} - {$address3} - CEP: {$zipcode} - {$city}";
+    $message = "{$address1}, {$streetnum} - {$address3} - CEP: {$zipcode} - {$city}";
     return $message;
   }
 
-  private function humanLocationDpd($pi) {
+  private function humanLocationDpd($pudo_inf) {
+    $pi_filler = array(
+      'ADDRESS1' => '',
+      'STREETNUM' => '',
+      'ADDRESS2' => '',
+      'ADDRESS3' => '',
+      'CITY' => '',
+      'ZIPCODE' => ''
+    );
+    $pi = $pudo_inf+$pi_filler;
     $address1 = $this->_helperData->sanitizeValue($pi['ADDRESS1']);
     $streetnum = $this->_helperData->sanitizeValue($pi['STREETNUM']);
     $address2 = $this->_helperData->sanitizeValue($pi['ADDRESS2']);

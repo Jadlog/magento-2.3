@@ -64,6 +64,11 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  #elimina conflito na porta 2222 caso necessário
+  if config_file["ssh_host_port"] then
+    config.vm.network :forwarded_port, guest: 22, host: config_file["ssh_host_port"], id: "ssh"
+  end
+
   if config_file["private_network_ip"] then
     # Configure private network
     config.vm.network "private_network", ip: config_file["private_network_ip"]

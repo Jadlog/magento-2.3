@@ -14,21 +14,30 @@ Tipos de mudanças:
 # Versões
 <!-- MarkdownTOC -->
 
+- [\[0.0.5\] - 2020-07-15](#005-2020-07-15)
+  - [Corrigido](#corrigido)
 - [\[0.0.4\] - 2020-03-18](#004-2020-03-18)
   - [Modificado](#modificado)
 - [\[0.0.3\] - 2019-12-02](#003-2019-12-02)
   - [Adicionado](#adicionado)
-  - [Modificado](#modificado-1)
-  - [Corrigido](#corrigido)
+  - [Modificado](#modificado_1)
+  - [Corrigido](#corrigido_1)
 - [\[0.0.2\] - 2019-10-30](#002-2019-10-30)
-  - [Adicionado](#adicionado-1)
-  - [Modificado](#modificado-2)
-  - [Corrigido](#corrigido-1)
+  - [Adicionado](#adicionado_1)
+  - [Modificado](#modificado_2)
+  - [Corrigido](#corrigido_2)
 - [\[0.0.1\] - 2019-10-14](#001-2019-10-14)
-  - [Adicionado](#adicionado-2)
+  - [Adicionado](#adicionado_2)
 - [*Em progresso*:](#em-progresso)
 
 <!-- /MarkdownTOC -->
+
+<a id="005-2020-07-15"></a>
+## [0.0.5] - 2020-07-15
+
+<a id="corrigido"></a>
+### Corrigido
+- Erro ao carregar PUDOs sem complemento.
 
 <a id="004-2020-03-18"></a>
 ## [0.0.4] - 2020-03-18
@@ -44,7 +53,7 @@ Tipos de mudanças:
 ### Adicionado
 - Tela para envio dos pedidos de coleta (backend).
 
-<a id="modificado-1"></a>
+<a id="modificado_1"></a>
 ### Modificado
 - Tabela *jadlog_sales_order*:
   - Inclusão da coluna *campos_dfe*.
@@ -53,23 +62,23 @@ Tipos de mudanças:
   - Alterar mapeamento da pasta com código fonte.
   - Habilitar composer na instalação do módulo (antes era no provisionamento da máquina).
 
-<a id="corrigido"></a>
+<a id="corrigido_1"></a>
 ### Corrigido
 - Recalcular frete utilizando o cep do ponto de retirada (tela "fechar pedido").
 
 <a id="002-2019-10-30"></a>
 ## [0.0.2] - 2019-10-30
 
-<a id="adicionado-1"></a>
+<a id="adicionado_1"></a>
 ### Adicionado
 - Busca de pontos de retirada.
 - Cálculo de frete para todos os pontos de retirada.
 
-<a id="modificado-2"></a>
+<a id="modificado_2"></a>
 ### Modificado
 - Melhorias na forma de apresentar os dados do ponto de retirada ao final da compra.
 
-<a id="corrigido-1"></a>
+<a id="corrigido_2"></a>
 ### Corrigido
 - Tela para escolha de pontos de retirada exibe os pontos com frete calculado.
 - Ambiente de desenvolvimento:
@@ -79,7 +88,7 @@ Tipos de mudanças:
 <a id="001-2019-10-14"></a>
 ## [0.0.1] - 2019-10-14
 
-<a id="adicionado-2"></a>
+<a id="adicionado_2"></a>
 ### Adicionado
 - Licença.
 - Ambiente de desenvolvimento.
