@@ -28,7 +28,7 @@ class Valor {
     $this->conta = $this->helperData->getContaCorrente();
     $this->contrato = $this->helperData->getNumeroContrato();
     $this->modalidade = $modalidade;
-    $this->peso = $peso;
+    $this->peso = max($peso, 0.1);
     $this->tpentrega = "D";
     $this->tpseguro = "N";
     $this->vldeclarado = $valor_declarado;

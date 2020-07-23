@@ -14,23 +14,31 @@ Tipos de mudanças:
 # Versões
 <!-- MarkdownTOC -->
 
+- [\[0.0.6\] - 2020-07-23](#006-2020-07-23)
+  - [Modificado](#modificado)
 - [\[0.0.5\] - 2020-07-15](#005-2020-07-15)
   - [Corrigido](#corrigido)
 - [\[0.0.4\] - 2020-03-18](#004-2020-03-18)
-  - [Modificado](#modificado)
+  - [Modificado](#modificado_1)
 - [\[0.0.3\] - 2019-12-02](#003-2019-12-02)
   - [Adicionado](#adicionado)
-  - [Modificado](#modificado_1)
+  - [Modificado](#modificado_2)
   - [Corrigido](#corrigido_1)
 - [\[0.0.2\] - 2019-10-30](#002-2019-10-30)
   - [Adicionado](#adicionado_1)
-  - [Modificado](#modificado_2)
+  - [Modificado](#modificado_3)
   - [Corrigido](#corrigido_2)
 - [\[0.0.1\] - 2019-10-14](#001-2019-10-14)
   - [Adicionado](#adicionado_2)
 - [*Em progresso*:](#em-progresso)
 
 <!-- /MarkdownTOC -->
+<a id="006-2020-07-23"></a>
+## [0.0.6] - 2020-07-23
+
+<a id="modificado"></a>
+### Modificado
+- Cotação de fretes arredondará peso para mínimo de 100g.
 
 <a id="005-2020-07-15"></a>
 ## [0.0.5] - 2020-07-15
@@ -42,7 +50,7 @@ Tipos de mudanças:
 <a id="004-2020-03-18"></a>
 ## [0.0.4] - 2020-03-18
 
-<a id="modificado"></a>
+<a id="modificado_1"></a>
 ### Modificado
 - Busca de pontos de retirada utilizando o endereço *http://www.jadlog.com.br/embarcador/api/pickup/pudos* sem a necessidade da **Chave "MyPudo"**.
   
@@ -53,7 +61,7 @@ Tipos de mudanças:
 ### Adicionado
 - Tela para envio dos pedidos de coleta (backend).
 
-<a id="modificado_1"></a>
+<a id="modificado_2"></a>
 ### Modificado
 - Tabela *jadlog_sales_order*:
   - Inclusão da coluna *campos_dfe*.
@@ -74,7 +82,7 @@ Tipos de mudanças:
 - Busca de pontos de retirada.
 - Cálculo de frete para todos os pontos de retirada.
 
-<a id="modificado_2"></a>
+<a id="modificado_3"></a>
 ### Modificado
 - Melhorias na forma de apresentar os dados do ponto de retirada ao final da compra.
 

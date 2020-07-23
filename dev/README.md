@@ -63,6 +63,9 @@ Segue exemplo de configuração:
     #OR if you want an specific IP:
     private_network_ip: "192.168.50.5" #specific IP
 
+    #if you want ssh on virtual machine on a diffetent port uncomment below
+    #ssh_host_port: 2200
+
     synced_folders:
       nfs: true
       default_disabled: true
